@@ -5,6 +5,7 @@ from sqlalchemy import (
     Date,
     DateTime,
     ForeignKey,
+    Integer,
     JSON,
     Numeric,
     Index,
@@ -17,13 +18,14 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db import Base
 
+ID_TYPE = BigInteger().with_variant(Integer, "sqlite")
 JSON_TYPE = JSON().with_variant(JSONB, "postgresql")
 
 
 class Tenant(Base):
     __tablename__ = "tenant"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(Text, nullable=False)
     status: Mapped[str] = mapped_column(Text, nullable=False, default="ACTIVE")
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), nullable=False)
@@ -32,7 +34,7 @@ class Tenant(Base):
 class Location(Base):
     __tablename__ = "location"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -46,7 +48,7 @@ class Location(Base):
 class Asset(Base):
     __tablename__ = "asset"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -63,7 +65,7 @@ class Asset(Base):
 class BusinessDay(Base):
     __tablename__ = "business_day"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -84,7 +86,7 @@ class BusinessDay(Base):
 class CashCount(Base):
     __tablename__ = "cash_count"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -107,7 +109,7 @@ class CashCount(Base):
 class ChannelMapping(Base):
     __tablename__ = "channel_mapping"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -120,7 +122,7 @@ class ChannelMapping(Base):
 class Employee(Base):
     __tablename__ = "employee"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -151,7 +153,7 @@ class ExternalIdMap(Base):
 class FeedIngestLog(Base):
     __tablename__ = "feed_ingest_log"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -177,7 +179,7 @@ class FeedIngestLog(Base):
 class LedgerEvent(Base):
     __tablename__ = "ledger_event"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -202,7 +204,7 @@ class LedgerEvent(Base):
 class Incident(Base):
     __tablename__ = "incident"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -225,7 +227,7 @@ class Incident(Base):
 class InventoryCount(Base):
     __tablename__ = "inventory_count"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -252,7 +254,7 @@ class InventoryCount(Base):
 class InventoryMovement(Base):
     __tablename__ = "inventory_movement"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -291,7 +293,7 @@ class IngestionEventMap(Base):
         ),
     )
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -307,7 +309,7 @@ class IngestionEventMap(Base):
 class ItemCategory(Base):
     __tablename__ = "item_category"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -321,7 +323,7 @@ class ItemCategory(Base):
 class Item(Base):
     __tablename__ = "item"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -341,7 +343,7 @@ class Item(Base):
 class ItemCost(Base):
     __tablename__ = "item_cost"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -378,7 +380,7 @@ class ItemExternalKey(Base):
 class LaborCostRate(Base):
     __tablename__ = "labor_cost_rate"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -396,7 +398,7 @@ class LaborCostRate(Base):
 class LaborPunch(Base):
     __tablename__ = "labor_punch"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -421,7 +423,7 @@ class LocationHours(Base):
         CheckConstraint("day_of_week >= 0 AND day_of_week <= 6", name="day_of_week"),
     )
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -440,7 +442,7 @@ class LocationHours(Base):
 class LocationHoursException(Base):
     __tablename__ = "location_hours_exception"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -457,7 +459,7 @@ class LocationHoursException(Base):
 class OpenCloseSignal(Base):
     __tablename__ = "open_close_signal"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -478,7 +480,7 @@ class OpenCloseSignal(Base):
 class Policy(Base):
     __tablename__ = "policy"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -491,7 +493,7 @@ class Policy(Base):
 class Payout(Base):
     __tablename__ = "payout"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -516,7 +518,7 @@ class Payout(Base):
 class PosDowntimeEvent(Base):
     __tablename__ = "pos_downtime_event"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -535,7 +537,7 @@ class PosDowntimeEvent(Base):
 class PosTerminal(Base):
     __tablename__ = "pos_terminal"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -549,7 +551,7 @@ class PosTerminal(Base):
 class Recipe(Base):
     __tablename__ = "recipe"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -564,7 +566,7 @@ class Recipe(Base):
 class RecipeComponent(Base):
     __tablename__ = "recipe_component"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -581,7 +583,7 @@ class RecipeComponent(Base):
 class ReportRun(Base):
     __tablename__ = "report_run_state"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -611,7 +613,7 @@ class ReportRun(Base):
 class SourceSystem(Base):
     __tablename__ = "source_system"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -624,7 +626,7 @@ class SourceSystem(Base):
 class Snapshot(Base):
     __tablename__ = "snapshot"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -643,7 +645,7 @@ class Snapshot(Base):
 class StockoutEvent(Base):
     __tablename__ = "stockout_event"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -664,7 +666,7 @@ class StockoutEvent(Base):
 class Ticket(Base):
     __tablename__ = "ticket"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -702,7 +704,7 @@ class Ticket(Base):
 class TicketDiscount(Base):
     __tablename__ = "ticket_discount"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -718,7 +720,7 @@ class TicketDiscount(Base):
 class TicketLineItem(Base):
     __tablename__ = "ticket_line_item"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -745,7 +747,7 @@ class TicketLineItem(Base):
 class TicketPayment(Base):
     __tablename__ = "ticket_payment"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -763,7 +765,7 @@ class TicketPayment(Base):
 class TicketRefund(Base):
     __tablename__ = "ticket_refund"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -780,7 +782,7 @@ class TicketRefund(Base):
 class TicketVoid(Base):
     __tablename__ = "ticket_void"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -806,7 +808,7 @@ class UomConversion(Base):
         CheckConstraint("factor > 0", name="uom_factor_positive"),
     )
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )
@@ -820,7 +822,7 @@ class UomConversion(Base):
 class WorkOrder(Base):
     __tablename__ = "work_order"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(ID_TYPE, primary_key=True, autoincrement=True)
     tenant_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("tenant.id"), nullable=False
     )

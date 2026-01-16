@@ -238,7 +238,7 @@ class SourceSystemCreate(BaseModel):
         },
     }
     name: str
-    type: str = Field(alias="type")
+    type: str
     is_active: bool = True
     tenant_id: int = 1
 
