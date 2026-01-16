@@ -5,6 +5,7 @@ from sqlalchemy import (
     Date,
     DateTime,
     ForeignKey,
+    JSON,
     Numeric,
     Index,
     String,
@@ -15,6 +16,8 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db import Base
+
+JSON_TYPE = JSON().with_variant(JSONB, "postgresql")
 
 
 class Tenant(Base):
@@ -98,7 +101,7 @@ class CashCount(Base):
     cashier_employee_id: Mapped[int | None] = mapped_column(
         BigInteger, ForeignKey("employee.id")
     )
-    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSONB)
+    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSON_TYPE)
 
 
 class ChannelMapping(Base):
@@ -168,7 +171,7 @@ class FeedIngestLog(Base):
     row_count: Mapped[int] = mapped_column(BigInteger, nullable=False, default=0)
     status: Mapped[str] = mapped_column(Text, nullable=False)
     ingested_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), nullable=False)
-    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSONB)
+    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSON_TYPE)
 
 
 class LedgerEvent(Base):
@@ -191,9 +194,9 @@ class LedgerEvent(Base):
     feed_type: Mapped[str] = mapped_column(Text, nullable=False)
     source_event_id: Mapped[str] = mapped_column(Text, nullable=False)
     occurred_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), nullable=False)
-    payload: Mapped[dict] = mapped_column(JSONB, nullable=False)
+    payload: Mapped[dict] = mapped_column(JSON_TYPE, nullable=False)
     ingested_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), nullable=False)
-    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSONB)
+    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSON_TYPE)
 
 
 class Incident(Base):
@@ -216,7 +219,7 @@ class Incident(Base):
     source_system_id: Mapped[int | None] = mapped_column(
         BigInteger, ForeignKey("source_system.id")
     )
-    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSONB)
+    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSON_TYPE)
 
 
 class InventoryCount(Base):
@@ -243,7 +246,7 @@ class InventoryCount(Base):
         BigInteger, ForeignKey("source_system.id")
     )
     external_ref: Mapped[str | None] = mapped_column(Text)
-    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSONB)
+    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSON_TYPE)
 
 
 class InventoryMovement(Base):
@@ -272,7 +275,7 @@ class InventoryMovement(Base):
         BigInteger, ForeignKey("source_system.id")
     )
     external_ref: Mapped[str | None] = mapped_column(Text)
-    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSONB)
+    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSON_TYPE)
 
 
 class IngestionEventMap(Base):
@@ -409,7 +412,7 @@ class LaborPunch(Base):
     source_system_id: Mapped[int | None] = mapped_column(
         BigInteger, ForeignKey("source_system.id")
     )
-    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSONB)
+    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSON_TYPE)
 
 
 class LocationHours(Base):
@@ -469,7 +472,7 @@ class OpenCloseSignal(Base):
     source_system_id: Mapped[int | None] = mapped_column(
         BigInteger, ForeignKey("source_system.id")
     )
-    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSONB)
+    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSON_TYPE)
 
 
 class Policy(Base):
@@ -481,7 +484,7 @@ class Policy(Base):
     )
     policy_version: Mapped[str] = mapped_column(Text, nullable=False)
     effective_from: Mapped[Date] = mapped_column(Date, nullable=False)
-    config: Mapped[dict] = mapped_column(JSONB, nullable=False)
+    config: Mapped[dict] = mapped_column(JSON_TYPE, nullable=False)
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), nullable=False)
 
 
@@ -526,7 +529,7 @@ class PosDowntimeEvent(Base):
     source_system_id: Mapped[int | None] = mapped_column(
         BigInteger, ForeignKey("source_system.id")
     )
-    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSONB)
+    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSON_TYPE)
 
 
 class PosTerminal(Base):
@@ -596,13 +599,13 @@ class ReportRun(Base):
         DateTime(timezone=True), nullable=False
     )
     numbers_status: Mapped[str] = mapped_column(Text, nullable=False)
-    feed_completeness_flags: Mapped[dict | None] = mapped_column(JSONB)
-    truth_labels: Mapped[dict | None] = mapped_column(JSONB)
-    kpis: Mapped[dict | None] = mapped_column(JSONB)
-    alerts: Mapped[dict | None] = mapped_column(JSONB)
-    ops_issues: Mapped[dict | None] = mapped_column(JSONB)
-    recommendations: Mapped[dict | None] = mapped_column(JSONB)
-    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSONB)
+    feed_completeness_flags: Mapped[dict | None] = mapped_column(JSON_TYPE)
+    truth_labels: Mapped[dict | None] = mapped_column(JSON_TYPE)
+    kpis: Mapped[dict | None] = mapped_column(JSON_TYPE)
+    alerts: Mapped[dict | None] = mapped_column(JSON_TYPE)
+    ops_issues: Mapped[dict | None] = mapped_column(JSON_TYPE)
+    recommendations: Mapped[dict | None] = mapped_column(JSON_TYPE)
+    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSON_TYPE)
 
 
 class SourceSystem(Base):
@@ -633,8 +636,8 @@ class Snapshot(Base):
     )
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), nullable=False)
     summary_hash: Mapped[str] = mapped_column(Text, nullable=False)
-    day_state_object: Mapped[dict] = mapped_column(JSONB, nullable=False)
-    snapshot_metadata: Mapped[dict | None] = mapped_column(JSONB)
+    day_state_object: Mapped[dict] = mapped_column(JSON_TYPE, nullable=False)
+    snapshot_metadata: Mapped[dict | None] = mapped_column(JSON_TYPE)
 
 
 class StockoutEvent(Base):
@@ -655,7 +658,7 @@ class StockoutEvent(Base):
     source_system_id: Mapped[int | None] = mapped_column(
         BigInteger, ForeignKey("source_system.id")
     )
-    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSONB)
+    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSON_TYPE)
 
 
 class Ticket(Base):
@@ -693,7 +696,7 @@ class Ticket(Base):
         BigInteger, ForeignKey("pos_terminal.id")
     )
     status: Mapped[str] = mapped_column(Text, nullable=False, default="CLOSED")
-    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSONB)
+    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSON_TYPE)
 
 
 class TicketDiscount(Base):
@@ -709,7 +712,7 @@ class TicketDiscount(Base):
     amount: Mapped[Numeric] = mapped_column(Numeric, nullable=False)
     reason: Mapped[str | None] = mapped_column(Text)
     applied_at: Mapped[DateTime | None] = mapped_column(DateTime(timezone=True))
-    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSONB)
+    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSON_TYPE)
 
 
 class TicketLineItem(Base):
@@ -736,7 +739,7 @@ class TicketLineItem(Base):
     channel_id: Mapped[int | None] = mapped_column(
         BigInteger, ForeignKey("channel_mapping.id")
     )
-    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSONB)
+    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSON_TYPE)
 
 
 class TicketPayment(Base):
@@ -754,7 +757,7 @@ class TicketPayment(Base):
     amount: Mapped[Numeric] = mapped_column(Numeric, nullable=False)
     card_brand: Mapped[str | None] = mapped_column(Text)
     last4: Mapped[str | None] = mapped_column(Text)
-    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSONB)
+    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSON_TYPE)
 
 
 class TicketRefund(Base):
@@ -771,7 +774,7 @@ class TicketRefund(Base):
     reason: Mapped[str | None] = mapped_column(Text)
     refunded_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), nullable=False)
     payment_method: Mapped[str | None] = mapped_column(Text)
-    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSONB)
+    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSON_TYPE)
 
 
 class TicketVoid(Base):
@@ -793,7 +796,7 @@ class TicketVoid(Base):
     terminal_id: Mapped[int | None] = mapped_column(
         BigInteger, ForeignKey("pos_terminal.id")
     )
-    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSONB)
+    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSON_TYPE)
 
 
 class UomConversion(Base):
@@ -833,4 +836,4 @@ class WorkOrder(Base):
     due_at: Mapped[DateTime | None] = mapped_column(DateTime(timezone=True))
     completed_at: Mapped[DateTime | None] = mapped_column(DateTime(timezone=True))
     description: Mapped[str | None] = mapped_column(Text)
-    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSONB)
+    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSON_TYPE)
